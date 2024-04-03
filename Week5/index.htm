@@ -1,0 +1,94 @@
+
+<head>
+
+<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+
+</head>
+
+<p><u><b>Per-pixel collision: </b></u>Please refer to the course github <a href="https://github.com/myuwbclasses/CSS385/tree/master/ClassExamples/Week5">Week5/PerPixelCollision Folder</a>.</p>
+<ol>
+	<li>Per-pixel texture collision(Pixel-Accurate Collision):
+        <ul>
+		<li>Script<b>: ShowOriginCorner--</b>
+		We can find the bottom-left corner of the object in the 
+		world (origin of texture[0][0])!</li>
+	
+		<li>We must read the texture in order to detect detail collision, so 
+		we need to:<ul>
+			<li>Select texture to open in Inspector</li>
+			<li>Texture Type: Sprite (2D and UI) as usual</li>
+			<li style="color:red">Under <b>Advanced</b>: <ul>
+			    <li> Read/Write Enabled: set to true</li>
+				<li>Then, do a <b>Apply</b></li>
+				<li>Must do this for all texture you want to detect per-pixel 
+				collision</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Script: <b>CollidableTexture</b><ul>
+			<li>Subclass from MonoBehavior</li>
+			<li>Must call InitTextureCollision(): To read in texture color</li>
+			<li>CollideTextures(): is the function to call (Must re-compute 
+			WorldOrigin everytime)</li>
+			<li>Check for Bound collision first</li>
+			<li>CollidePoint: is <em>one </em>(of many potential) position where 
+			the two textures overlap</li>
+		</ul>
+		</li>
+		<li>Script: <b>UserTextureControl:</b><ul>
+			<li>simple movement control</li>
+			</ul>
+		</li>
+		<li>Script <b>CollideWithTexture:</b>
+		<ul>
+			<li>Define on the <b>smaller </b>of the two colliding textures!!</li>
+			<li>Refer to largeTexture</li>
+			<li>Both colliding textures must have <b>ColldableTexture </b>component 
+			defined.</li>
+		</ul>
+		</li>
+		<li>Objects: Net and Flower<ul>
+			<li>Take a look on the Net object: 4 scripts defined on it!!</li>
+			<li>Flower is a CollidableTexture: no user control, just collidable!</li>
+		</ul>
+		</li>
+		<li>Run time complexity O(TextureSize)<ul>
+			<li>Run this scrip from the smaller of the colliding textures!!</li>
+			<li><span class="auto-style1"><strong>WATCH OUT</strong></span>!! 
+			this makes a HUGE different!!</li>
+			<li>Look at the TightNet object! MUST more efficient! (about 3x!)<br></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	
+
+
+<p style="color:red"><b>LIMITATION></b>
+This does <b>not</b> work if your Sprite Renderer is referencing a Sprite Texture (one element of a sprite sheet)!
+
+	<li>Example of Pixel Collide: 
+		<ul>
+			<li>Three main objects:  Minion (1K x 1K), Hero-Texture (works well), and Hero-Sprite (does not work well)
+				<ul>
+					<li>Minion: is the <i>large</i> texture for collision
+					<li>Hero-Texture: is a Sprite Renderer created based on a single texture image
+					<li>Hero-Sprite: is a Sprite Renderer created from an element in a sprite sheet
+				</ul>
+				</li>
+			<li>All three has the script: CollidableTexture.cs [cashes the texture color!] </li>
+			<li>The two heros also has the CollideWithTexture.cs script (linked to Minion) </li>
+			<li><b>Try:</b> <ul>
+				<li>Move Hero-Texture with WASD and rotate with QE. Very good per-pixel collisions.</li>
+				<li>Move the Hero-Sprite using the editor move control to observe false positive collision and 
+				 performance defficiencies (attempting to collide with the entire Sprite Sheet). </li>
+				 </ul>
+				 </li>
+		</ul>
+	</li>
+</ol>				

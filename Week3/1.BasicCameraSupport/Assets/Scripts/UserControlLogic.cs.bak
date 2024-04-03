@@ -1,0 +1,45 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class UserControlLogic : MonoBehaviour
+{
+    public GameObject mRefPoint = null;
+
+    public CameraSupport mTheCamera = null;
+    public float mZoomFactor = 1.1f;
+
+    public float mDX = 1f;
+    public float mDY = 1f;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        Debug.Assert(mTheCamera != null);
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        CheckZoom();
+        CheckPan();
+    }
+
+    private void CheckZoom()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+            mTheCamera.Zoom(mZoomFactor);
+
+        if (Input.GetKeyDown(KeyCode.J))
+            mTheCamera.ZoomTowards(mRefPoint.transform.position, mZoomFactor);
+    }
+
+    private void CheckPan()
+    {
+        if (Input.GetKeyDown(KeyCode.N))
+            mTheCamera.MoveBy(mDX, mDY);
+        if (Input.GetKeyDown(KeyCode.M))
+            mTheCamera.MoveTo(mRefPoint.transform.position.x, mRefPoint.transform.position.y);
+    }
+}
